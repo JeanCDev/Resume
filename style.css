@@ -1,0 +1,181 @@
+#details,
+#workingexperience,
+#skills,
+#courses,
+#languages,
+#hobbies,
+#links,
+#education {
+  display: flex;
+  margin-bottom: 1.5rem;
+  color: #494A60;
+  font-family: 'Arial Narrow', Arial, sans-serif;
+  font-weight: 100;
+}
+
+#details aside {
+  padding-top: .5rem;
+}
+
+img {
+  position: absolute;
+  top: -2.1rem;
+  right:0;
+  width: 5.5rem;
+  margin-top: 2rem;
+  border-radius: 4rem;
+}
+
+#details h1 {
+  font-size: 1.3rem;
+}
+
+#details h3 {
+  font-size: .9rem;
+  text-align: justify;
+}
+
+#details div p {
+  line-height: 0.3rem;
+  font-size: .8rem;
+}
+
+#skills aside,
+#courses aside,
+#education aside,
+#workingexperience aside {
+  padding-top: 1.5rem;
+}
+
+#hobbies aside,
+#languages aside,
+#links aside {
+  padding-top: .9rem;
+}
+
+aside {
+  width: 20%;
+  color: #686868;
+  font-size: .8rem;
+}
+
+#education h4,
+#courses h4,
+#workingexperience h4 {
+  margin-bottom: .3rem;
+}
+
+#links h4 {
+  line-height: 0.4rem;
+  margin-bottom: 0;
+}
+
+#links p {
+  font-size: .8rem;
+  line-height: 0.3rem;
+}
+
+#languages aside {
+  width: 16.5%;
+}
+
+#details div,
+#workingexperience div,
+#education div,
+#skills div,
+#links div,
+#hobbies div,
+#courses div
+{
+  width: 100%;
+}
+
+#skills div {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+#skills div div {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+#skills h4 {
+  margin-bottom: .3rem;
+}
+
+#skills p{
+  margin-bottom: 0rem;
+  margin-left: 5px;
+}
+
+#skills div div span {
+  margin: 0 5px;
+}
+
+#skills .bar {
+  width: 1.5rem;
+  margin-top: .9rem;
+}
+
+#education div div span,
+#workingexperience div div span,
+#courses div div span {
+  font-size: .8rem;
+  color: #686868;
+}
+
+#education div div span {
+  font-size: .8rem;
+}
+
+#languages div {
+  line-height: 0rem;
+}
+
+.lang {
+  display: flex;
+  align-items: center;
+}
+
+.lang span {
+  margin: 0 5px;
+}
+
+/* Barras circulares */
+@keyframes growProgressBar {
+  0%, 33% { --pgPercentage: 0; }
+  100% { --pgPercentage: var(--value); }
+}
+
+@property --pgPercentage {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
+
+div[role="progressbar"] {
+  --size: 1.5rem;
+  --fg: #369;
+  --bg: #def;
+  --pgPercentage: var(--value);
+  /* animation: growProgressBar 3s 1 forwards; */
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  margin-left: 5px;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(closest-side, white 60%, transparent 0 99.9%, white 0),
+    conic-gradient(var(--fg) calc(var(--pgPercentage) * 1%), var(--bg) 0);
+  font-family: Helvetica, Arial, sans-serif;
+  /* font-size: calc(var(--size) / 5); */
+  color: var(--fg);
+}
+
+/* div[role="progressbar"]::before {
+  counter-reset: percentage var(--value);
+  content: counter(percentage) '%';
+} */
