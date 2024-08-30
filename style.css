@@ -140,7 +140,7 @@ aside {
 }
 
 .lang span {
-  margin: 0 5px;
+  margin: 0;
 }
 
 /* Barras circulares */
@@ -175,7 +175,7 @@ div[role="progressbar"] {
   color: var(--fg);
 }
 
-/* div[role="progressbar"]::before {
+div[role="progressbar"]::before {
   counter-reset: percentage var(--value);
   content: counter(percentage) '%';
-} */
+}
