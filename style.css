@@ -44,6 +44,8 @@ img {
 #about .title,
 #skills .title,
 #courses .title,
+#hobbies .title,
+#languages .title,
 #education .title,
 #workingexperience .title {
   border-top: 1px solid #686868;
@@ -80,7 +82,7 @@ img {
 }
 
 #languages .title {
-  width: 16.5%;
+  width: 100%;
 }
 
 #details div,
