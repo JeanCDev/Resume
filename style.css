@@ -6,14 +6,14 @@
 #hobbies,
 #links,
 #education {
-  display: flex;
+  /* display: flex; */
   margin-bottom: 1.5rem;
   color: #494A60;
   font-family: 'Arial Narrow', Arial, sans-serif;
   font-weight: 100;
 }
 
-#details aside {
+#details .title {
   padding-top: .5rem;
 }
 
@@ -40,20 +40,24 @@ img {
   font-size: .8rem;
 }
 
-#skills aside,
-#courses aside,
-#education aside,
-#workingexperience aside {
-  padding-top: 1.5rem;
+#links .title,
+#about .title,
+#skills .title,
+#courses .title,
+#education .title,
+#workingexperience .title {
+  border-top: 1px solid #686868;
+  margin-top: 3rem;
+  padding-top: .5rem;
 }
 
-#hobbies aside,
-#languages aside,
-#links aside {
+#hobbies .title,
+#languages .title,
+#links .title {
   padding-top: .9rem;
 }
 
-aside {
+.title {
   width: 20%;
   color: #686868;
   font-size: .8rem;
@@ -75,7 +79,7 @@ aside {
   line-height: 0.3rem;
 }
 
-#languages aside {
+#languages .title {
   width: 16.5%;
 }
 
@@ -155,13 +159,13 @@ aside {
   initial-value: 0;
 }
 
-div[role="progressbar"] {
+d/* iv[role="progressbar"] {
   --size: 1.5rem;
   --fg: #369;
   --bg: #def;
   --pgPercentage: var(--value);
   /* animation: growProgressBar 3s 1 forwards; */
-  width: var(--size);
+  /* width: var(--size);
   height: var(--size);
   border-radius: 50%;
   margin-left: 5px;
@@ -170,12 +174,13 @@ div[role="progressbar"] {
   background:
     radial-gradient(closest-side, white 60%, transparent 0 99.9%, white 0),
     conic-gradient(var(--fg) calc(var(--pgPercentage) * 1%), var(--bg) 0);
-  font-family: Helvetica, Arial, sans-serif;
+  font-family: Helvetica, Arial, sans-serif; */ 
   /* font-size: calc(var(--size) / 5); */
-  color: var(--fg);
-}
+  /* color: var(--fg);
+} */
 
-div[role="progressbar"]::before {
+/* div[role="progressbar"]::before {
   counter-reset: percentage var(--value);
   content: counter(percentage) '%';
 }
+ */
