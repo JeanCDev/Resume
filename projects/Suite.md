@@ -2,7 +2,7 @@
 
 ## 🚀 Visão Geral
 
-Desenvolvedor Full Stack com ampla experiência no ecossistema SoftExpert, atuando em projetos críticos que abrangem desde regras de negócio e gamificação até integrações com plataformas externas como Microsoft Teams e AWS.
+Desenvolvedor Full Stack com ampla experiência no ecossistema SoftExpert, atuando em projetos críticos que abrangem desde regras de negócio e gamificação até integrações com plataformas externas como Microsoft Teams e AWS, além de plataforma de IA & RAG (AWS Bedrock, busca semântica e copilotos com LLM).
 
 ---
 
@@ -100,6 +100,7 @@ Desenvolvedor Full Stack com ampla experiência no ecossistema SoftExpert, atuan
 - Criação de componentes React para interface de MeetingData
 - Sistema de recorrência de reuniões com integração ao scheduler
 - Implementação de associações e participantes externos
+- **3 features de IA no módulo:** Meeting Insights (relatórios/atas), Meeting Creation (geração por descrição) e Decision Extraction (extração de decisões da transcrição), todas via AWS Bedrock
 
 **Estrutura principal:** `System/web/wwwroot/ui/reactorCmps/src/meeting/MeetingData/`
 
@@ -202,13 +203,14 @@ Desenvolvedor Full Stack com ampla experiência no ecossistema SoftExpert, atuan
 **Arquivo principal:** `JavaSrc/sesuite-core/src/main/java/com/softexpert/authentication/synchronizer/team/services/TeamService.java`
 
 ### ☁️ Amazon Web Services (AWS)
-**Tecnologias:** Java, AWS SDK, S3, SQS, Cognito
+**Tecnologias:** Java, AWS SDK, S3, SQS, Cognito, Bedrock
 
 - **Implementação de integrações com múltiplos serviços AWS**
 - **Amazon S3:** Sistema de armazenamento de arquivos eletrônicos
 - **Amazon SQS:** Sistema de filas para processamento assíncrono
 - **AWS Cognito:** Sistema de autenticação e identidade
 - **AWS Textract:** Serviço de OCR e processamento de documentos
+- **Amazon Bedrock:** Modelos LLM (Claude, Amazon Nova, Titan) para IA e RAG
 - **CloudWatch:** Monitoramento e métricas de billing
 
 **Módulos principais:**
@@ -216,13 +218,28 @@ Desenvolvedor Full Stack com ampla experiência no ecossistema SoftExpert, atuan
 - `JavaSrc/electronicfile-api/src/main/java/com/softexpert/electronicfileapi/amazons3/`
 - `JavaSrc/filestorage/src/main/java/com/softexpert/storage/connector/AmazonS3Connector.java`
 
-### 🤖 Inteligência Artificial
-**Tecnologias:** Java, Machine Learning, Processamento de Linguagem Natural
+### 🤖 Inteligência Artificial & RAG
+**Tecnologias:** AWS Bedrock, Claude (3.5/3.7/4/4.5), Amazon Nova, Titan Embeddings, LLM Gateway, RAG, Tool-Augmented Generation, PHP, Java, OpenSearch
 
-- **Desenvolvimento de soluções com IA para otimização de processos**
-- Implementação de análise preditiva em projetos e finanças
-- Sistema de recomendações baseado em comportamento do usuário
-- Integração com serviços de IA da AWS e outros provedores
+- **Plataforma de IA & RAG da Suite** — arquitetura completa em dois tiers: pipeline RAG em Java (busca) e camada de aplicações/agentes LLM em PHP (Copilot), ambos com telemetria de custo/tokens e gate de créditos de IA
+- **RAG Data Plane (Java search-engine):** pipeline de ingestão com detecção de idioma, chunking, embeddings (Titan v2), classificação de documentos (Nova lite/micro) e indexação em OpenSearch; recuperação híbrida léxica+vetorial com **Reciprocal Rank Fusion (RRF)** e geração de resposta com Nova Pro
+- **AI Summary com classificação de queries** — gate que decide quando a busca merece resumo por IA, com controle de créditos, billing de tokens de saída e métricas por etapa (ingestão e resposta)
+- **LLM Gateway & Bedrock** — invocação de modelos Claude Sonnet/Haiku e Amazon Nova com seleção de modelo abstraída por enum `Complexity`, streaming (SSE), structured output com `ToolChoice` e construção de requests por family-specific body builders
+- **Tool-Augmented Generation** — endpoints REST da própria plataforma expostos como ferramentas chamáveis por agentes LLM (`AiTools`, `SchemaConverter`, `DynamicToolHandler`), com cache de schemas MCP, resolução de colisões de nomes, validação SSRF e classificação de erros
+- **IA no módulo de Reuniões (3 features):**
+  - **Meeting Insights** — copilot sobre a reunião: relatório HTML com streaming + plano de ação e ata estruturados via tools JSON; análise de humor por participante estritamente grounded na transcrição (guardrails anti-alucinação via glossário e `<DATA-COMPLETENESS>`)
+  - **Meeting Creation** — geração de rascunhos de reunião a partir de descrição em linguagem natural (com anexos de imagem/PDF/texto), com contexto temporal pré-resolvido no backend
+  - **Decision Extraction** — extração das decisões tomadas na transcrição com mapeamento para as pautas, degradando para lista vazia em caso de recusa do modelo
+- **Geração de relatórios de artefatos** (asset, kanban, OKR, projeto, estratégia/indicadores, reuniões) e **avaliação de riscos** — agente conversacional que recupera contexto de domínio e chama ferramentas para propor avaliações/controles/tratamentos (RAG aplicado a GRC)
+- **Schema-driven generation** — aplicações de IA configuradas inteiramente via contrato de schema DTO (tools + prompt gerados do contrato)
+- **Controle de acesso e custo** — gates de permissão (`isHosting`, `hasAIFeaturePermission`), quota de créditos de IA (`hasAICredit`) e billing de uso em todas as chamadas
+
+**Arquivos principais:**
+- `System/web/include/cop/api/applications/meeting/` — features de IA do módulo de reuniões
+- `System/web/include/cop/aitools/` — bridge de ferramentas REST → Bedrock
+- `System/web/include/cop/api/integrationapi/ainlp/` — construção de requests Bedrock (Claude/Nova)
+- `System/web/include/cop/api/applications/` — aplicações Copilot (schema-driven, artefatos, risk evaluation)
+- `JavaSrc/search-engine/` — pipeline RAG (ingestão + retriever + AI summary)
 
 ---
 
@@ -239,9 +256,14 @@ Desenvolvedor Full Stack com ampla experiência no ecossistema SoftExpert, atuan
 - **HTML5/CSS3:** Componentização, Responsive Design
 
 ### Cloud & DevOps
-- **AWS:** S3, SQS, Cognito, Textract, CloudWatch
+- **AWS:** S3, SQS, Cognito, Textract, CloudWatch, Bedrock
 - **Microsoft:** Azure AD, Teams, Graph API
 - **Ferramentas:** Git, Maven, Docker, Jenkins
+
+### IA & RAG
+- **Modelos:** AWS Bedrock (Claude Sonnet/Haiku, Amazon Nova, Titan Embeddings)
+- **Padrões:** RAG (chunking, embeddings, hybrid retrieval, RRF), Tool-Augmented Generation, LLM Gateway, streaming SSE, structured output
+- **Ferramentas:** LLM Gateway, AiTools/MCP schemas, OpenSearch vetorial, prompt engineering com guardrails anti-alucinação
 
 ---
 
@@ -286,6 +308,7 @@ Desenvolvedor Full Stack com ampla experiência no ecossistema SoftExpert, atuan
 - Sistema de armazenamento em nuvem com alta disponibilidade
 - **Pipeline CI/CD** com 13 stages de automação completa
 - **Arquitetura de microserviços** containerizada e escalável
+- **Plataforma de IA & RAG** integrada ao ERP — busca semântica com respostas por IA, copilotos de reunião e agentes com ferramentas de domínio
 
 ---
 
@@ -352,12 +375,14 @@ Desenvolvedor Full Stack com ampla experiência no ecossistema SoftExpert, atuan
 - **Workflow Engine:** Automação de processos de negócio
 - **Business Intelligence:** Análise de dados e relatórios
 - **Gestão de Projetos:** PMO e metodologias ágeis
+- **IA Corporativa:** RAG, copilotos e agentes LLM integrados ao ERP
 
 ### 🚀 Inovação Tecnológica
 - **Microserviços:** Arquitetura distribuída e escalável
 - **Cloud Computing:** AWS e Azure integrados
 - **APIs RESTful:** Design e implementação de APIs
 - **Real-time Communication:** WebSockets e eventos
+- **IA & RAG:** LLMs (Bedrock/Claude/Nova), retrieval-augmented generation, agentes com ferramentas
 
 ---
 
